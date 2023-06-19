@@ -1,0 +1,84 @@
+package com.sample.rules
+
+import com.sample.Klijent;
+
+ 
+rule "Ne poseduje dozvolu"
+    when
+    	k: Klijent(kategorija=="ne poseduje" && dozvoljenoIzdavanje=="nepoznato")
+    then
+    	k.setDozvoljenoIzdavanje("nije");
+    	update(k);
+end
+
+rule "Mladji od 19 i B manje od godinu dana"
+    when
+    	k: Klijent((godine<19)||(kategorija=="B" && vazenje<1) && dozvoljenoIzdavanje=="nepozanto")
+    then
+    	k.setDozvoljenoIzdavanje("nije");
+    	update(k);
+end
+
+rule "Dozvoljeno izdavanje"
+    when
+    	k: Klijent(dozvoljenoIzdavanje=="nepoznato")
+    then
+    	k.setDozvoljenoIzdavanje("jeste");
+    	update(k);
+end
+
+rule "Potreban depozit"
+    when
+    	k: Klijent(dozvoljenoIzdavanje=="jeste" && vazenje<5 && potrebanDepozit=="nepoznato")
+    then
+    	k.setPotrebanDepozit("jeste");
+    	update(k);
+end
+
+rule "Nije potreban depozit"
+    when
+    	k: Klijent(dozvoljenoIzdavanje=="jeste"&& potrebanDepozit=="nepoznato")
+    then
+    	k.setPotrebanDepozit("jeste");
+    	update(k);
+end
+
+rule "Depozit 1"
+    when
+    	k: Klijent(vazenje<=3 && potrebanDepozit=="jeste" && depozit==-1)
+    then
+    	k.setDepozit(50);
+    	update(k);
+end
+
+rule "Depozit 2"
+    when
+    	k: Klijent(vazenje>3 && vazenje<5 && potrebanDepozit=="jeste" && depozit==-1)
+    then
+    	k.setDepozit(30);
+    	update(k);
+end
+
+rule "Klasa vozila 1"
+    when
+    	k: Klijent(vazenje<=2 && dozvoljenoIzdavanje=="jeste" && klasaVozila=="nepoznato")
+    then
+    	k.setKlasaVozila("A,B");
+    	update(k);
+end
+
+rule "Klasa vozila 2"
+    when
+    	k: Klijent(vazenje>2 && vazenje<5 && dozvoljenoIzdavanje=="jeste" && klasaVozila=="nepoznato")
+    then
+    	k.setKlasaVozila("A,B,C,D");
+    	update(k);
+end
+
+rule "Klasa vozila 3"
+    when
+    	k: Klijent(vazenje>=5 && dozvoljenoIzdavanje=="jeste" && klasaVozila=="nepoznato")
+    then
+    	k.setKlasaVozila("A,B,C,D,E,F");
+    	update(k);
+end
