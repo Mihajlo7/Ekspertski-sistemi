@@ -1,0 +1,177 @@
+package com.sample.rules
+
+import com.sample.Osiguranje; 
+
+ 
+rule "Osnovna cena 1"
+    when
+    	o: Osiguranje(snaga<=40,osnovnaCena==-1)
+    then
+    	o.setOsnovnaCena(10000);
+    	update(o);
+end
+
+rule "Osnovna cena 2"
+    when
+    	o: Osiguranje(snaga>40,snaga<=50,osnovnaCena==-1)
+    then
+    	o.setOsnovnaCena(11000);
+    	update(o);
+end
+
+rule "Osnovna cena 3"
+    when
+    	o: Osiguranje(snaga>50,snaga<=75,osnovnaCena==-1)
+    then
+    	o.setOsnovnaCena(15000);
+    	update(o);
+end
+
+rule "Osnovna cena 4"
+    when
+    	o: Osiguranje(snaga>75,osnovnaCena==-1)
+    then
+    	o.setOsnovnaCena(25000);
+    	update(o);
+end
+
+rule "Osnovna cena 5 a"
+    when
+    	o: Osiguranje(premijaProsleGodine==1,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*0.85);
+    	update(o);
+end
+
+rule "Osnovna cena 5 b"
+    when
+    	o: Osiguranje(premijaProsleGodine==2,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*0.90);
+    	update(o);
+end
+
+rule "Osnovna cena 5 c"
+    when
+    	o: Osiguranje(premijaProsleGodine==3,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*0.95);
+    	update(o);
+end
+
+rule "Osnovna cena 5 d"
+    when
+    	o: Osiguranje(premijaProsleGodine==5,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*1.10);
+    	update(o);
+end
+
+rule "Osnovna cena 5 e"
+    when
+    	o: Osiguranje(premijaProsleGodine==6,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*1.30);
+    	update(o);
+end
+
+rule "Osnovna cena 5 7"
+    when
+    	o: Osiguranje(premijaProsleGodine==7,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*1.50);
+    	update(o);
+end
+
+rule "Osnovna cena 5 8"
+    when
+    	o: Osiguranje(premijaProsleGodine==8,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*1.70);
+    	update(o);
+end
+
+rule "Osnovna cena 5 9"
+    when
+    	o: Osiguranje(premijaProsleGodine==9,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*1.90);
+    	update(o);
+end
+
+rule "Osnovna cena 5 10"
+    when
+    	o: Osiguranje(premijaProsleGodine==10,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*2.10);
+    	update(o);
+end
+
+rule "Osnovna cena 5 11"
+    when
+    	o: Osiguranje(premijaProsleGodine==10,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*2.30);
+    	update(o);
+end
+
+rule "Osnovna cena 5 12"
+    when
+    	o: Osiguranje(premijaProsleGodine==10,osnovnaCena!=-1)
+    then
+    	o.setOsnovnaCena(o.getOsnovnaCena()*2.50);
+    	update(o);
+end
+
+
+
+rule "Uslov 7"
+	when
+		o: Osiguranje(registracija=="novo vozilo", premijaTekuceGodine==0)
+	then
+		o.setPremijaTekuceGodine(4);
+		update(o);
+end
+
+rule "Uslov 8"
+	when
+		o: Osiguranje(registracija=="registrovano", premijaTekuceGodine==0,saobracajneNesrece==0,premijaProsleGodine>=2,premijaProsleGodine<=12)
+	then
+		o.setPremijaTekuceGodine(o.getPremijaProsleGodine()-1);
+		update(o);
+end
+
+rule "Uslov 8a"
+	when
+		o: Osiguranje(registracija=="registrovano", premijaTekuceGodine==0,saobracajneNesrece==0,premijaProsleGodine==1)
+	then
+		o.setPremijaTekuceGodine(1);
+		update(o);
+end
+
+rule "Uslov 9"
+	when
+		o: Osiguranje(registracija=="registrovano", premijaTekuceGodine==0,saobracajneNesrece>0,premijaProsleGodine>=2,premijaProsleGodine<=12)
+	then
+		o.setPremijaTekuceGodine(o.getPremijaProsleGodine()+3*o.getSaobracajneNesrece());
+		if(o.getPremijaTekuceGodine()>12){
+			o.setPremijaTekuceGodine(12);
+		}
+		update(o);
+end
+
+rule "Uslov 10"
+	when
+		o: Osiguranje(premijaProsleGodine<=4,konacnaCena==-1,premijaTekuceGodine!=-1)
+	then
+		o.setKonacnaCena(o.getOsnovnaCena()*(0.8+o.getPremijaTekuceGodine()*0.05));
+		update(o);
+end
+
+rule "Uslov 11"
+	when
+		o: Osiguranje(premijaProsleGodine>4,konacnaCena==-1,premijaTekuceGodine!=-1)
+	then
+		o.setKonacnaCena(o.getOsnovnaCena()*(0.2*o.getPremijaTekuceGodine()+0.1));
+		update(o);
+end
