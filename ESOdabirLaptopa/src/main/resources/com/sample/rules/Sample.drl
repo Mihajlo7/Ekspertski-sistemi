@@ -1,0 +1,95 @@
+package com.sample.rules
+ 
+import com.sample.Laptop;
+ 
+rule "Uslov 2"
+    when
+    	l:Laptop(namena.contains("igrice"),procesor=="nepoznato")
+    then
+    	l.setProcesor("Intel i5/AMD Ryzen 5");
+    	l.setRamMemorija(12);
+    	l.setVelicinaMemorije(512);
+    	l.setTipGraficke("neintegrisana");
+    	
+    	update(l);
+       
+end
+
+rule "Uslov 3"
+    when
+    	l:Laptop(namena.contains("poslovne aplikacije"),procesor=="nepoznato")
+    then
+    	l.setProcesor("Intel i3/AMD Ryzen 3");
+    	l.setRamMemorija(8);
+    	l.setVelicinaMemorije(256);
+    	l.setTipGraficke("integrisana");
+    	
+    	update(l);
+       
+end
+
+rule "Uslov 4"
+    when
+    	l:Laptop(namena.contains("graficki dizajn/CAD projektovanje"),procesor=="nepoznato")
+    then
+    	l.setProcesor("Intel i3/AMD Ryzen 3");
+    	l.setRamMemorija(8);
+    	l.setVelicinaMemorije(512);
+    	l.setTipGraficke("neintegrisana");
+    	
+    	update(l);
+       
+end
+
+rule "Uslov 5"
+    when
+    	l:Laptop(namena.contains("igrice"),vrstaIgrice=="nove i zahtevne",procesor=="Intel i5/AMD Ryzen 5")
+    then
+    	l.setProcesor("Intel i7/AMD Ryzen 7");
+    	l.setRamMemorija(16);
+    	l.setVelicinaMemorije(1024);
+    	l.setTipGraficke("integrisana");
+    	
+    	update(l);
+       
+end
+
+rule "Uslov 6"
+    when
+    	l:Laptop((namena.contains("igrice") || namena.contains("graficki dizajn/CAD projektovanje")) && nosenje=="cesto" && velicinaEkrana==-1)
+    then
+    	l.setVelicinaEkrana(15);
+    	
+    	update(l);
+       
+end
+
+rule "Uslov 7"
+    when
+    	l:Laptop((namena.contains("igrice") || namena.contains("graficki dizajn/CAD projektovanje")) && nosenje=="retko" && velicinaEkrana==-1)
+    then
+    	l.setVelicinaEkrana(17);
+    	
+    	update(l);
+       
+end
+
+rule "Uslov 8"
+    when
+    	l:Laptop(namena.contains("poslovne aplikacije"),nosenje=="cesto",velicinaEkrana==-1)
+    then
+    	l.setVelicinaEkrana(14);
+    	
+    	update(l);
+       
+end
+
+rule "Uslov 9"
+    when
+    	l:Laptop(namena.contains("poslovne aplikacije"),nosenje=="retko",velicinaEkrana==-1)
+    then
+    	l.setVelicinaEkrana(14);
+    	
+    	update(l);
+       
+end
